@@ -1,0 +1,892 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Админ - Madaniyat Bog'i</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Segoe UI', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 15px;
+        }
+        .container { max-width: 1400px; margin: 0 auto; }
+        .top-header {
+            background: white;
+            padding: 15px 20px;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+            margin-bottom: 15px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .lang-switcher { display: flex; gap: 8px; }
+        .lang-btn {
+            padding: 10px 15px;
+            border: 3px solid #e0e0e0;
+            background: white;
+            border-radius: 12px;
+            cursor: pointer;
+            font-weight: bold;
+            font-size: 14px;
+            transition: 0.3s;
+        }
+        .lang-btn.active {
+            background: #667eea;
+            color: white;
+            border-color: #667eea;
+            transform: scale(1.1);
+        }
+        .header {
+            background: white;
+            padding: 20px;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+            margin-bottom: 20px;
+            text-align: center;
+        }
+        .header h1 { color: #667eea; font-size: 32px; }
+        .admin-badge {
+            background: #667eea;
+            color: white;
+            padding: 8px 20px;
+            border-radius: 20px;
+            font-weight: bold;
+            display: inline-block;
+            margin-top: 10px;
+        }
+        .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 20px; }
+        .card { background: white; border-radius: 15px; padding: 25px; box-shadow: 0 10px 30px rgba(0,0,0,0.3); }
+        .card h2 { color: #333; margin-bottom: 20px; font-size: 24px; border-bottom: 3px solid #667eea; padding-bottom: 10px; }
+        .attraction-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px;
+            background: #f8f9fa;
+            border-radius: 10px;
+            margin-bottom: 12px;
+            transition: 0.3s;
+        }
+        .attraction-item:hover { transform: translateX(5px); box-shadow: 0 5px 15px rgba(0,0,0,0.1); }
+        .attraction-name { font-weight: 600; color: #333; font-size: 18px; }
+        .attraction-price { color: #4CAF50; font-size: 16px; font-weight: bold; margin-top: 5px; }
+        .toggle-switch {
+            position: relative;
+            width: 70px;
+            height: 35px;
+            background: #ccc;
+            border-radius: 35px;
+            cursor: pointer;
+            transition: 0.3s;
+            margin-left: 15px;
+        }
+        .toggle-switch.active { background: #4CAF50; }
+        .toggle-switch::after {
+            content: '';
+            position: absolute;
+            width: 28px;
+            height: 28px;
+            background: white;
+            border-radius: 50%;
+            top: 3.5px;
+            left: 4px;
+            transition: 0.3s;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+        }
+        .toggle-switch.active::after { left: 38px; }
+        .status-badge { padding: 6px 14px; border-radius: 20px; font-size: 13px; font-weight: bold; }
+        .status-open { background: #d4edda; color: #155724; }
+        .status-closed { background: #f8d7da; color: #721c24; }
+        .input-group { margin-bottom: 18px; }
+        .input-group label { display: block; margin-bottom: 8px; color: #333; font-weight: 600; font-size: 15px; }
+        .input-group input {
+            width: 100%;
+            padding: 14px 16px;
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
+            font-size: 17px;
+            transition: 0.3s;
+        }
+        .input-group input:focus { outline: none; border-color: #667eea; box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1); }
+        .btn { padding: 15px 30px; border: none; border-radius: 10px; font-size: 18px; font-weight: bold; cursor: pointer; transition: 0.3s; width: 100%; }
+        .btn-success { background: #4CAF50; color: white; }
+        .btn-success:hover { background: #45a049; transform: translateY(-2px); box-shadow: 0 5px 20px rgba(76, 175, 80, 0.4); }
+        .btn-warning { background: #FFA500; color: white; margin-bottom: 15px; }
+        .btn-warning:hover { background: #FF8C00; }
+        .btn-danger { background: #dc3545; color: white; }
+        .btn-danger:hover { background: #c82333; }
+        .quick-amounts { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; margin-bottom: 18px; }
+        .quick-btn {
+            padding: 12px;
+            background: #f0f0f0;
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
+            cursor: pointer;
+            font-weight: bold;
+            font-size: 16px;
+            transition: 0.3s;
+        }
+        .quick-btn:hover { background: #667eea; color: white; border-color: #667eea; transform: scale(1.05); }
+        .full-width { grid-column: 1 / -1; }
+        .stats-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 15px; margin-top: 20px; }
+        .stat-card {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 25px;
+            border-radius: 12px;
+            text-align: center;
+        }
+        .stat-value { font-size: 40px; font-weight: bold; margin-bottom: 8px; }
+        .stat-label { font-size: 14px; opacity: 0.95; }
+        .success-message {
+            background: #d4edda;
+            color: #155724;
+            padding: 15px;
+            border-radius: 10px;
+            margin-bottom: 15px;
+            border: 2px solid #c3e6cb;
+            display: none;
+        }
+        .cards-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 15px;
+        }
+        .cards-table th {
+            background: #667eea;
+            color: white;
+            padding: 12px;
+            text-align: left;
+            font-size: 14px;
+        }
+        .cards-table td {
+            padding: 12px;
+            border-bottom: 1px solid #e0e0e0;
+            font-size: 14px;
+        }
+        .cards-table tr:hover { background: #f8f9fa; }
+        .tab-buttons {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+        .tab-btn {
+            padding: 10px 20px;
+            background: #e0e0e0;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: 0.3s;
+        }
+        .tab-btn.active { background: #667eea; color: white; }
+        .tab-content { display: none; }
+        .tab-content.active { display: block; }
+        .search-result {
+            background: #fff3cd;
+            border: 3px solid #ffc107;
+            padding: 20px;
+            border-radius: 15px;
+            margin-top: 15px;
+        }
+        .search-result h3 { color: #856404; margin-bottom: 10px; }
+        .search-result p { margin: 5px 0; font-size: 16px; }
+        .transaction-log { max-height: 350px; overflow-y: auto; margin-top: 15px; }
+        .transaction-item {
+            padding: 15px;
+            background: #f8f9fa;
+            border-left: 5px solid #667eea;
+            margin-bottom: 12px;
+            border-radius: 8px;
+        }
+        .transaction-name { font-weight: bold; font-size: 17px; color: #333; }
+        .transaction-time { font-size: 13px; color: #666; margin-top: 4px; }
+        .transaction-amount { font-weight: bold; color: #4CAF50; font-size: 20px; margin-top: 6px; }
+        @media (max-width: 768px) {
+            .grid { grid-template-columns: 1fr; }
+            .stats-grid { grid-template-columns: repeat(2, 1fr); }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="top-header">
+            <div style="color: #667eea; font-weight: bold; font-size: 18px;" id="lang-title">🌐 Язык / Til / Language</div>
+            <div class="lang-switcher">
+                <button class="lang-btn active" onclick="setLanguage('ru')">RU</button>
+                <button class="lang-btn" onclick="setLanguage('uz')">UZ</button>
+                <button class="lang-btn" onclick="setLanguage('en')">EN</button>
+            </div>
+        </div>
+
+        <div class="header">
+            <h1 id="main-title">🎡 Madaniyat Bog'i Park</h1>
+            <div class="admin-badge" id="admin-badge">👤 АДМИНИСТРАТОР</div>
+        </div>
+
+        <div class="grid">
+            <div class="card">
+                <h2 id="attractions-header">🎢 Управление аттракционами</h2>
+                <div id="attractions-list"></div>
+            </div>
+
+            <div class="card">
+                <h2 id="search-header">🔍 Поиск и пополнение</h2>
+                <div class="input-group">
+                    <label id="search-label">👤 Поиск по имени гостя</label>
+                    <input type="text" id="search-name" placeholder="" autocomplete="off">
+                </div>
+                <button class="btn btn-warning" onclick="searchByName()">
+                    <span id="search-btn">🔍 Найти гостя</span>
+                </button>
+                <div id="search-result"></div>
+
+                <div id="topup-section" style="display: none; margin-top: 20px;">
+                    <h3 style="color: #333; margin-bottom: 15px;" id="topup-title">💰 Пополнение счёта</h3>
+                    <div class="input-group">
+                        <label id="quick-label">Быстрый выбор суммы</label>
+                        <div class="quick-amounts">
+                            <button class="quick-btn" onclick="setAmount(20000)">20,000</button>
+                            <button class="quick-btn" onclick="setAmount(50000)">50,000</button>
+                            <button class="quick-btn" onclick="setAmount(100000)">100,000</button>
+                            <button class="quick-btn" onclick="setAmount(200000)">200,000</button>
+                        </div>
+                    </div>
+                    <div class="input-group">
+                        <label id="amount-label">Сумма пополнения (сум)</label>
+                        <input type="number" id="top-up-amount" placeholder="0" min="0" step="1000">
+                    </div>
+                    <button class="btn btn-success" onclick="topUpCard()">
+                        <span id="topup-btn">✅ Пополнить счёт</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <div class="card full-width">
+            <h2 id="create-header">💳 Создание новой карты гостя</h2>
+            <div class="success-message" id="success-msg"></div>
+            <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 15px;">
+                <div class="input-group">
+                    <label id="name-label">👤 Имя гостя</label>
+                    <input type="text" id="guest-name" placeholder="" autocomplete="off">
+                </div>
+                <div class="input-group">
+                    <label id="password-label">🔒 Пароль (4 цифры)</label>
+                    <input type="text" id="guest-password" placeholder="1234" maxlength="4" pattern="[0-9]{4}">
+                </div>
+                <div class="input-group">
+                    <label id="initial-label">💰 Начальная сумма</label>
+                    <input type="number" id="initial-amount" placeholder="0" min="0" step="1000">
+                </div>
+            </div>
+            <button class="btn btn-success" onclick="createNewCard()">
+                <span id="create-btn">✅ Создать карту гостя</span>
+            </button>
+        </div>
+
+        <div class="card full-width">
+            <h2 id="manage-header">📊 Управление системой</h2>
+            <div class="tab-buttons">
+                <button class="tab-btn active" onclick="switchTab('stats')" id="tab-stats-btn">Статистика</button>
+                <button class="tab-btn" onclick="switchTab('cards')" id="tab-cards-btn">Все карты</button>
+                <button class="tab-btn" onclick="switchTab('transactions')" id="tab-trans-btn">Все транзакции</button>
+            </div>
+
+            <div id="tab-stats" class="tab-content active">
+                <div class="stats-grid">
+                    <div class="stat-card"><div class="stat-value" id="total-visitors">0</div><div class="stat-label" id="stat-visitors">Гостей</div></div>
+                    <div class="stat-card"><div class="stat-value" id="total-revenue">0</div><div class="stat-label" id="stat-revenue">Выручка (сум)</div></div>
+                    <div class="stat-card"><div class="stat-value" id="active-cards">0</div><div class="stat-label" id="stat-cards">Активных карт</div></div>
+                    <div class="stat-card"><div class="stat-value" id="open-attractions">0</div><div class="stat-label" id="stat-open">Открыто</div></div>
+                </div>
+            </div>
+
+            <div id="tab-cards" class="tab-content">
+                <table class="cards-table">
+                    <thead>
+                        <tr>
+                            <th id="th-name">👤 Имя</th>
+                            <th id="th-password">🔒 Пароль</th>
+                            <th id="th-balance">💰 Баланс</th>
+                            <th id="th-created">📅 Создана</th>
+                        </tr>
+                    </thead>
+                    <tbody id="cards-list"></tbody>
+                </table>
+            </div>
+
+            <div id="tab-transactions" class="tab-content">
+                <div id="all-transactions"></div>
+            </div>
+        </div>
+
+        <div class="card full-width">
+            <h2 style="color: #dc3545;" id="reset-header">⚠️ Сброс всех данных</h2>
+            <p style="margin-bottom: 15px; color: #666;" id="reset-warning">Это удалит все карты, транзакции и статистику. Действие необратимо!</p>
+            <button class="btn btn-danger" onclick="resetAllData()">
+                <span id="reset-btn">🗑️ Очистить всю базу данных</span>
+            </button>
+        </div>
+    </div>
+
+    <script>
+        let currentLang = 'ru';
+
+        const translations = {
+            ru: {
+                mainTitle: '🎡 Madaniyat Bog\'i Park',
+                adminBadge: '👤 АДМИНИСТРАТОР',
+                attractionsHeader: '🎢 Управление аттракционами',
+                searchHeader: '🔍 Поиск и пополнение',
+                searchLabel: '👤 Поиск по имени гостя',
+                searchPlaceholder: 'Введите имя',
+                searchBtn: '🔍 Найти гостя',
+                topupTitle: '💰 Пополнение счёта',
+                quickLabel: 'Быстрый выбор суммы',
+                amountLabel: 'Сумма пополнения (сум)',
+                topupBtn: '✅ Пополнить счёт',
+                createHeader: '💳 Создание новой карты гостя',
+                nameLabel: '👤 Имя гостя',
+                namePlaceholder: 'Введите имя',
+                passwordLabel: '🔒 Пароль (4 цифры)',
+                initialLabel: '💰 Начальная сумма',
+                createBtn: '✅ Создать карту гостя',
+                manageHeader: '📊 Управление системой',
+                tabStats: 'Статистика',
+                tabCards: 'Все карты',
+                tabTrans: 'Все транзакции',
+                statVisitors: 'Гостей',
+                statRevenue: 'Выручка (сум)',
+                statCards: 'Активных карт',
+                statOpen: 'Открыто',
+                thName: '👤 Имя',
+                thPassword: '🔒 Пароль',
+                thBalance: '💰 Баланс',
+                thCreated: '📅 Создана',
+                resetHeader: '⚠️ Сброс всех данных',
+                resetWarning: 'Это удалит все карты, транзакции и статистику. Действие необратимо!',
+                resetBtn: '🗑️ Очистить всю базу данных',
+                statusOpen: '✓ Открыто',
+                statusClosed: '✗ Закрыто',
+                sum: 'сум',
+                notFound: '❌ Гость не найден',
+                notFoundMsg: 'Гость с именем "$NAME" не зарегистрирован в системе',
+                found: '✅ Гость найден',
+                foundName: 'Имя',
+                foundPassword: 'Пароль',
+                foundBalance: 'Баланс',
+                foundCreated: 'Создана',
+                enterName: '❌ Введите имя (минимум 2 символа)!',
+                enterAmount: '❌ Введите сумму!',
+                searchFirst: '❌ Сначала найдите гостя!',
+                topupSuccess: '✅ Счёт пополнен!\n\nГость: $NAME\nПополнено: $AMOUNT сум\nНовый баланс: $BALANCE сум',
+                createSuccess: '✅ Карта создана!',
+                createName: 'Имя',
+                createPassword: 'Пароль',
+                createBalance: 'Начальный баланс',
+                createTellGuest: '⚠️ СООБЩИТЕ ГОСТЮ:',
+                createTellMsg: 'Ваше имя: $NAME, пароль: $PASSWORD',
+                enterValidName: '❌ Введите имя гостя (минимум 2 символа)!',
+                enterValidPassword: '❌ Пароль должен быть 4 цифры!',
+                nameExists: '❌ Гость с таким именем уже существует!',
+                resetConfirm1: '⚠️ ВЫ УВЕРЕНЫ?\n\nЭто удалит ВСЕ данные:\n- Все карты гостей\n- Всю историю транзакций\n- Всю статистику\n\nЭто действие НЕОБРАТИМО!',
+                resetConfirm2: '⚠️ ПОСЛЕДНЕЕ ПРЕДУПРЕЖДЕНИЕ!\n\nВсе данные будут удалены НАВСЕГДА!\n\nПродолжить?',
+                resetComplete: '✅ Все данные удалены! База данных очищена.',
+                noCards: 'Нет карт',
+                noTransactions: 'Нет транзакций',
+                topup: '💰 Пополнение',
+                payment: '🎢 Оплата',
+                newCard: 'НОВАЯ'
+            },
+            uz: {
+                mainTitle: '🎡 Madaniyat Bog\'i Park',
+                adminBadge: '👤 ADMINISTRATOR',
+                attractionsHeader: '🎢 Attraksionlarni boshqarish',
+                searchHeader: '🔍 Qidirish va to\'ldirish',
+                searchLabel: '👤 Mehmon ismini qidirish',
+                searchPlaceholder: 'Ismni kiriting',
+                searchBtn: '🔍 Mehmonni topish',
+                topupTitle: '💰 Hisobni to\'ldirish',
+                quickLabel: 'Tez tanlash',
+                amountLabel: 'To\'ldirish summasi (so\'m)',
+                topupBtn: '✅ Hisobni to\'ldirish',
+                createHeader: '💳 Yangi mehmon kartasini yaratish',
+                nameLabel: '👤 Mehmon ismi',
+                namePlaceholder: 'Ismni kiriting',
+                passwordLabel: '🔒 Parol (4 raqam)',
+                initialLabel: '💰 Boshlang\'ich summa',
+                createBtn: '✅ Mehmon kartasini yaratish',
+                manageHeader: '📊 Tizimni boshqarish',
+                tabStats: 'Statistika',
+                tabCards: 'Barcha kartalar',
+                tabTrans: 'Barcha tranzaksiyalar',
+                statVisitors: 'Mehmonlar',
+                statRevenue: 'Daromad (so\'m)',
+                statCards: 'Faol kartalar',
+                statOpen: 'Ochiq',
+                thName: '👤 Ism',
+                thPassword: '🔒 Parol',
+                thBalance: '💰 Balans',
+                thCreated: '📅 Yaratilgan',
+                resetHeader: '⚠️ Barcha ma\'lumotlarni o\'chirish',
+                resetWarning: 'Bu barcha kartalar, tranzaksiyalar va statistikani o\'chiradi. Qaytarib bo\'lmaydi!',
+                resetBtn: '🗑️ Butun bazani tozalash',
+                statusOpen: '✓ Ochiq',
+                statusClosed: '✗ Yopiq',
+                sum: 'so\'m',
+                notFound: '❌ Mehmon topilmadi',
+                notFoundMsg: '"$NAME" ismli mehmon tizimda yo\'q',
+                found: '✅ Mehmon topildi',
+                foundName: 'Ism',
+                foundPassword: 'Parol',
+                foundBalance: 'Balans',
+                foundCreated: 'Yaratilgan',
+                enterName: '❌ Ismni kiriting (kamida 2 ta belgi)!',
+                enterAmount: '❌ Summani kiriting!',
+                searchFirst: '❌ Avval mehmonni toping!',
+                topupSuccess: '✅ Hisob to\'ldirildi!\n\nMehmon: $NAME\nTo\'ldirildi: $AMOUNT so\'m\nYangi balans: $BALANCE so\'m',
+                createSuccess: '✅ Karta yaratildi!',
+                createName: 'Ism',
+                createPassword: 'Parol',
+                createBalance: 'Boshlang\'ich balans',
+                createTellGuest: '⚠️ MEHMONGA AYTING:',
+                createTellMsg: 'Sizning ismingiz: $NAME, parol: $PASSWORD',
+                enterValidName: '❌ Mehmon ismini kiriting (kamida 2 ta belgi)!',
+                enterValidPassword: '❌ Parol 4 raqam bo\'lishi kerak!',
+                nameExists: '❌ Bu ismli mehmon allaqachon mavjud!',
+                resetConfirm1: '⚠️ ISHONCHINGIZ KOMILMI?\n\nBu BARCHA ma\'lumotlarni o\'chiradi:\n- Barcha mehmon kartalari\n- Barcha tranzaksiyalar tarixi\n- Barcha statistika\n\nBu amalni qaytarib bo\'lmaydi!',
+                resetConfirm2: '⚠️ OXIRGI OGOHLANTIRISH!\n\nBarcha ma\'lumotlar BUTUNLAY o\'chiriladi!\n\nDavom ettirasizmi?',
+                resetComplete: '✅ Barcha ma\'lumotlar o\'chirildi! Ma\'lumotlar bazasi tozalandi.',
+                noCards: 'Kartalar yo\'q',
+                noTransactions: 'Tranzaksiyalar yo\'q',
+                topup: '💰 To\'ldirish',
+                payment: '🎢 To\'lov',
+                newCard: 'YANGI'
+            },
+            en: {
+                mainTitle: '🎡 Madaniyat Bog\'i Park',
+                adminBadge: '👤 ADMINISTRATOR',
+                attractionsHeader: '🎢 Manage Attractions',
+                searchHeader: '🔍 Search and Top-up',
+                searchLabel: '👤 Search by guest name',
+                searchPlaceholder: 'Enter name',
+                searchBtn: '🔍 Find Guest',
+                topupTitle: '💰 Top-up Balance',
+                quickLabel: 'Quick Select',
+                amountLabel: 'Top-up Amount (sum)',
+                topupBtn: '✅ Top-up Balance',
+                createHeader: '💳 Create New Guest Card',
+                nameLabel: '👤 Guest Name',
+                namePlaceholder: 'Enter name',
+                passwordLabel: '🔒 Password (4 digits)',
+                initialLabel: '💰 Initial Amount',
+                createBtn: '✅ Create Guest Card',
+                manageHeader: '📊 System Management',
+                tabStats: 'Statistics',
+                tabCards: 'All Cards',
+                tabTrans: 'All Transactions',
+                statVisitors: 'Guests',
+                statRevenue: 'Revenue (sum)',
+                statCards: 'Active Cards',
+                statOpen: 'Open',
+                thName: '👤 Name',
+                thPassword: '🔒 Password',
+                thBalance: '💰 Balance',
+                thCreated: '📅 Created',
+                resetHeader: '⚠️ Reset All Data',
+                resetWarning: 'This will delete all cards, transactions and statistics. This action is irreversible!',
+                resetBtn: '🗑️ Clear Entire Database',
+                statusOpen: '✓ Open',
+                statusClosed: '✗ Closed',
+                sum: 'sum',
+                notFound: '❌ Guest Not Found',
+                notFoundMsg: 'Guest named "$NAME" is not registered in the system',
+                found: '✅ Guest Found',
+                foundName: 'Name',
+                foundPassword: 'Password',
+                foundBalance: 'Balance',
+                foundCreated: 'Created',
+                enterName: '❌ Enter name (minimum 2 characters)!',
+                enterAmount: '❌ Enter amount!',
+                searchFirst: '❌ Find guest first!',
+                topupSuccess: '✅ Balance topped up!\n\nGuest: $NAME\nAdded: $AMOUNT sum\nNew balance: $BALANCE sum',
+                createSuccess: '✅ Card Created!',
+                createName: 'Name',
+                createPassword: 'Password',
+                createBalance: 'Initial Balance',
+                createTellGuest: '⚠️ TELL THE GUEST:',
+                createTellMsg: 'Your name: $NAME, password: $PASSWORD',
+                enterValidName: '❌ Enter guest name (minimum 2 characters)!',
+                enterValidPassword: '❌ Password must be 4 digits!',
+                nameExists: '❌ Guest with this name already exists!',
+                resetConfirm1: '⚠️ ARE YOU SURE?\n\nThis will delete ALL data:\n- All guest cards\n- All transaction history\n- All statistics\n\nThis action is IRREVERSIBLE!',
+                resetConfirm2: '⚠️ FINAL WARNING!\n\nAll data will be deleted FOREVER!\n\nContinue?',
+                resetComplete: '✅ All data deleted! Database cleared.',
+                noCards: 'No cards',
+                noTransactions: 'No transactions',
+                topup: '💰 Top-up',
+                payment: '🎢 Payment',
+                newCard: 'NEW'
+            }
+        };
+
+        const attractionsTranslations = {
+            ru: [
+                'Американские горки', 'Колесо обозрения', 'Карусель', 'Автодром',
+                'Комната страха', 'Водные горки', 'Батут-парк', 'Детская площадка'
+            ],
+            uz: [
+                'Amerika tobog\'oni', 'Aylana g\'ildirak', 'Karusel', 'Avtodrom',
+                'Qo\'rquv xonasi', 'Suv tobog\'oni', 'Batut park', 'Bolalar maydoni'
+            ],
+            en: [
+                'Roller Coaster', 'Ferris Wheel', 'Carousel', 'Go-Karts',
+                'Horror Room', 'Water Slides', 'Trampoline Park', 'Kids Playground'
+            ]
+        };
+
+        const attractions = [
+            { id: 1, name: 'Американские горки', price: 7000, open: true },
+            { id: 2, name: 'Колесо обозрения', price: 7000, open: true },
+            { id: 3, name: 'Карусель', price: 7000, open: true },
+            { id: 4, name: 'Автодром', price: 7000, open: true },
+            { id: 5, name: 'Комната страха', price: 7000, open: true },
+            { id: 6, name: 'Водные горки', price: 7000, open: true },
+            { id: 7, name: 'Батут-парк', price: 7000, open: true },
+            { id: 8, name: 'Детская площадка', price: 7000, open: true }
+        ];
+        
+        let database = { 
+            cards: {}, 
+            transactions: [], 
+            stats: { visitors: 0, revenue: 0, activeCards: 0 }
+        };
+        
+        let currentSearchName = null;
+
+        function setLanguage(lang) {
+            currentLang = lang;
+            document.querySelectorAll('.lang-btn').forEach(btn => btn.classList.remove('active'));
+            event.target.classList.add('active');
+            updateAllTexts();
+        }
+
+        function updateAllTexts() {
+            const t = translations[currentLang];
+            document.getElementById('main-title').textContent = t.mainTitle;
+            document.getElementById('admin-badge').textContent = t.adminBadge;
+            document.getElementById('attractions-header').textContent = t.attractionsHeader;
+            document.getElementById('search-header').textContent = t.searchHeader;
+            document.getElementById('search-label').textContent = t.searchLabel;
+            document.getElementById('search-name').placeholder = t.searchPlaceholder;
+            document.getElementById('search-btn').textContent = t.searchBtn;
+            document.getElementById('topup-title').textContent = t.topupTitle;
+            document.getElementById('quick-label').textContent = t.quickLabel;
+            document.getElementById('amount-label').textContent = t.amountLabel;
+            document.getElementById('topup-btn').textContent = t.topupBtn;
+            document.getElementById('create-header').textContent = t.createHeader;
+            document.getElementById('name-label').textContent = t.nameLabel;
+            document.getElementById('guest-name').placeholder = t.namePlaceholder;
+            document.getElementById('password-label').textContent = t.passwordLabel;
+            document.getElementById('initial-label').textContent = t.initialLabel;
+            document.getElementById('create-btn').textContent = t.createBtn;
+            document.getElementById('manage-header').textContent = t.manageHeader;
+            document.getElementById('tab-stats-btn').textContent = t.tabStats;
+            document.getElementById('tab-cards-btn').textContent = t.tabCards;
+            document.getElementById('tab-trans-btn').textContent = t.tabTrans;
+            document.getElementById('stat-visitors').textContent = t.statVisitors;
+            document.getElementById('stat-revenue').textContent = t.statRevenue;
+            document.getElementById('stat-cards').textContent = t.statCards;
+            document.getElementById('stat-open').textContent = t.statOpen;
+            document.getElementById('th-name').textContent = t.thName;
+            document.getElementById('th-password').textContent = t.thPassword;
+            document.getElementById('th-balance').textContent = t.thBalance;
+            document.getElementById('th-created').textContent = t.thCreated;
+            document.getElementById('reset-header').textContent = t.resetHeader;
+            document.getElementById('reset-warning').textContent = t.resetWarning;
+            document.getElementById('reset-btn').textContent = t.resetBtn;
+
+            renderAttractions();
+            renderAllCards();
+            renderAllTransactions();
+        }
+
+        function loadData() {
+            const saved = localStorage.getItem('parkDatabase');
+            if (saved) {
+                database = JSON.parse(saved);
+            }
+            const savedAttr = localStorage.getItem('attractions');
+            if (savedAttr) {
+                const loaded = JSON.parse(savedAttr);
+                loaded.forEach((a, i) => { if (attractions[i]) attractions[i].open = a.open; });
+            }
+        }
+
+        function saveData() {
+            localStorage.setItem('parkDatabase', JSON.stringify(database));
+            localStorage.setItem('attractions', JSON.stringify(attractions));
+            updateAnalytics();
+        }
+
+        function renderAttractions() {
+            const t = translations[currentLang];
+            const names = attractionsTranslations[currentLang];
+            document.getElementById('attractions-list').innerHTML = attractions.map((attr, i) => `
+                <div class="attraction-item">
+                    <div><div class="attraction-name">${names[i]}</div><div class="attraction-price">7,000 ${t.sum}</div></div>
+                    <div style="display: flex; align-items: center;">
+                        <span class="status-badge ${attr.open ? 'status-open' : 'status-closed'}">${attr.open ? t.statusOpen : t.statusClosed}</span>
+                        <div class="toggle-switch ${attr.open ? 'active' : ''}" onclick="toggleAttraction(${attr.id})"></div>
+                    </div>
+                </div>
+            `).join('');
+            saveData();
+        }
+
+        function toggleAttraction(id) {
+            const attr = attractions.find(a => a.id === id);
+            if (attr) { attr.open = !attr.open; renderAttractions(); }
+        }
+
+        function setAmount(amount) { document.getElementById('top-up-amount').value = amount; }
+
+        function searchByName() {
+            const t = translations[currentLang];
+            const searchName = document.getElementById('search-name').value.trim().toLowerCase();
+            const resultDiv = document.getElementById('search-result');
+            const topupSection = document.getElementById('topup-section');
+
+            if (!searchName || searchName.length < 2) {
+                alert(t.enterName);
+                return;
+            }
+
+            const cards = Object.values(database.cards);
+            const card = cards.find(c => c.name.toLowerCase() === searchName);
+
+            if (!card) {
+                resultDiv.innerHTML = `<div class="search-result"><h3>${t.notFound}</h3><p>${t.notFoundMsg.replace('$NAME', searchName)}</p></div>`;
+                topupSection.style.display = 'none';
+                currentSearchName = null;
+                return;
+            }
+
+            currentSearchName = card.name;
+            resultDiv.innerHTML = `
+                <div class="search-result">
+                    <h3>${t.found}</h3>
+                    <p><strong>👤 ${t.foundName}:</strong> ${card.name}</p>
+                    <p><strong>🔒 ${t.foundPassword}:</strong> ${card.password}</p>
+                    <p><strong>💰 ${t.foundBalance}:</strong> ${card.balance.toLocaleString()} ${t.sum}</p>
+                    <p><strong>📅 ${t.foundCreated}:</strong> ${new Date(card.created).toLocaleString(currentLang === 'ru' ? 'ru-RU' : currentLang === 'uz' ? 'uz-UZ' : 'en-US')}</p>
+                </div>
+            `;
+            topupSection.style.display = 'block';
+        }
+
+        function topUpCard() {
+            const t = translations[currentLang];
+            if (!currentSearchName) {
+                alert(t.searchFirst);
+                return;
+            }
+
+            const amount = parseInt(document.getElementById('top-up-amount').value);
+
+            if (!amount || amount <= 0) {
+                alert(t.enterAmount);
+                return;
+            }
+
+            const cards = Object.values(database.cards);
+            const card = cards.find(c => c.name.toLowerCase() === currentSearchName.toLowerCase());
+
+            if (!card) {
+                alert(t.notFound);
+                return;
+            }
+
+            card.balance += amount;
+            database.stats.revenue += amount;
+            database.stats.visitors++;
+
+            database.transactions.unshift({
+                name: card.name,
+                amount,
+                type: 'top-up',
+                timestamp: new Date().toISOString(),
+                newBalance: card.balance
+            });
+
+            saveData();
+            renderAllCards();
+            renderAllTransactions();
+            searchByName();
+
+            alert(t.topupSuccess.replace('$NAME', card.name).replace('$AMOUNT', amount.toLocaleString()).replace('$BALANCE', card.balance.toLocaleString()));
+
+            document.getElementById('top-up-amount').value = '';
+        }
+
+        function createNewCard() {
+            const t = translations[currentLang];
+            const guestName = document.getElementById('guest-name').value.trim();
+            const password = document.getElementById('guest-password').value.trim();
+            const amount = parseInt(document.getElementById('initial-amount').value) || 0;
+
+            if (!guestName || guestName.length < 2) {
+                alert(t.enterValidName);
+                return;
+            }
+
+            if (!password || password.length !== 4 || !/^\d{4}$/.test(password)) {
+                alert(t.enterValidPassword);
+                return;
+            }
+
+            const cardId = 'CARD_' + Date.now();
+            const existingCards = Object.values(database.cards);
+            if (existingCards.find(c => c.name.toLowerCase() === guestName.toLowerCase())) {
+                alert(t.nameExists);
+                return;
+            }
+
+            const newCard = {
+                id: cardId,
+                name: guestName,
+                password: password,
+                balance: amount,
+                created: new Date().toISOString(),
+                purchases: []
+            };
+
+            database.cards[cardId] = newCard;
+            database.stats.activeCards++;
+
+            if (amount > 0) {
+                database.stats.revenue += amount;
+                database.stats.visitors++;
+                database.transactions.unshift({
+                    name: guestName,
+                    amount,
+                    type: 'top-up',
+                    timestamp: new Date().toISOString(),
+                    newBalance: amount,
+                    isNewCard: true
+                });
+            }
+
+            saveData();
+            renderAllCards();
+            renderAllTransactions();
+
+            const msg = document.getElementById('success-msg');
+            msg.innerHTML = `
+                <strong>${t.createSuccess}</strong><br><br>
+                👤 ${t.createName}: <strong>${guestName}</strong><br>
+                🔒 ${t.createPassword}: <strong>${password}</strong><br>
+                💰 ${t.createBalance}: <strong>${amount.toLocaleString()} ${t.sum}</strong><br><br>
+                <strong style="color: #ff6b6b;">${t.createTellGuest}</strong><br>
+                "${t.createTellMsg.replace('$NAME', guestName).replace('$PASSWORD', password)}"
+            `;
+            msg.style.display = 'block';
+            setTimeout(() => msg.style.display = 'none', 10000);
+
+            document.getElementById('guest-name').value = '';
+            document.getElementById('guest-password').value = '';
+            document.getElementById('initial-amount').value = '';
+        }
+
+        function renderAllCards() {
+            const t = translations[currentLang];
+            const tbody = document.getElementById('cards-list');
+            const cards = Object.values(database.cards);
+            if (cards.length === 0) {
+                tbody.innerHTML = `<tr><td colspan="4" style="text-align: center; color: #999;">${t.noCards}</td></tr>`;
+                return;
+            }
+            tbody.innerHTML = cards.map(card => `
+                <tr>
+                    <td>👤 ${card.name}</td>
+                    <td>🔒 ${card.password}</td>
+                    <td style="color: #4CAF50; font-weight: bold;">${card.balance.toLocaleString()} ${t.sum}</td>
+                    <td>${new Date(card.created).toLocaleDateString(currentLang === 'ru' ? 'ru-RU' : currentLang === 'uz' ? 'uz-UZ' : 'en-US')}</td>
+                </tr>
+            `).join('');
+        }
+
+        function renderAllTransactions() {
+            const t = translations[currentLang];
+            const container = document.getElementById('all-transactions');
+            if (database.transactions.length === 0) {
+                container.innerHTML = `<p style="color: #999; text-align: center; padding: 20px;">${t.noTransactions}</p>`;
+                return;
+            }
+
+            container.innerHTML = database.transactions.map(tr => {
+                const date = new Date(tr.timestamp);
+                const typeLabel = tr.type === 'top-up' ? t.topup : t.payment;
+                const badge = tr.isNewCard ? `<span style="background: #ffc107; color: #000; padding: 2px 8px; border-radius: 10px; font-size: 11px; margin-left: 8px;">${t.newCard}</span>` : '';
+                return `
+                    <div class="transaction-item">
+                        <div class="transaction-name">${typeLabel} - ${tr.name} ${badge}</div>
+                        <div class="transaction-time">🕐 ${date.toLocaleString(currentLang === 'ru' ? 'ru-RU' : currentLang === 'uz' ? 'uz-UZ' : 'en-US')}</div>
+                        <div class="transaction-amount">${tr.amount > 0 ? '+' : ''}${tr.amount.toLocaleString()} ${t.sum}</div>
+                        <div style="font-size: 14px; color: #666; margin-top: 4px;">${t.foundBalance}: ${tr.newBalance.toLocaleString()} ${t.sum}</div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        function updateAnalytics() {
+            const t = translations[currentLang];
+            document.getElementById('total-visitors').textContent = database.stats.visitors;
+            document.getElementById('total-revenue').textContent = database.stats.revenue.toLocaleString();
+            document.getElementById('active-cards').textContent = database.stats.activeCards;
+            document.getElementById('open-attractions').textContent = attractions.filter(a => a.open).length;
+        }
+
+        function switchTab(tab) {
+            document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+            document.querySelectorAll('.tab-content').forEach(content => content.classList.remove('active'));
+
+            event.target.classList.add('active');
+            document.getElementById('tab-' + tab).classList.add('active');
+
+            if (tab === 'cards') renderAllCards();
+            if (tab === 'transactions') renderAllTransactions();
+        }
+
+        function resetAllData() {
+            const t = translations[currentLang];
+            if (!confirm(t.resetConfirm1)) return;
+            if (!confirm(t.resetConfirm2)) return;
+
+            database = { 
+                cards: {}, 
+                transactions: [], 
+                stats: { visitors: 0, revenue: 0, activeCards: 0 }
+            };
+
+            saveData();
+            renderAllCards();
+            renderAllTransactions();
+
+            document.getElementById('search-result').innerHTML = '';
+            document.getElementById('topup-section').style.display = 'none';
+
+            alert(t.resetComplete);
+        }
+
+        loadData();
+        updateAllTexts();
+        updateAnalytics();
+    </script>
+</body>
+</html>
