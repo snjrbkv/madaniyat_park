@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Madaniyat Bog'i - Гость</title>
+    <title>Madaniyat Bog'i</title>
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body {
@@ -29,10 +29,7 @@
             -webkit-text-fill-color: transparent;
         }
         
-        .lang-switcher {
-            display: flex;
-            gap: 8px;
-        }
+        .lang-switcher { display: flex; gap: 8px; }
         
         .lang-btn {
             padding: 10px 15px;
@@ -52,11 +49,7 @@
             transform: scale(1.1);
         }
         
-        .container {
-            max-width: 600px;
-            margin: 0 auto;
-            padding: 20px;
-        }
+        .container { max-width: 600px; margin: 0 auto; padding: 20px; }
         
         .welcome-card {
             background: white;
@@ -67,23 +60,10 @@
             margin-bottom: 20px;
         }
         
-        .welcome-card h1 {
-            color: #333;
-            font-size: 32px;
-            margin-bottom: 10px;
-        }
+        .welcome-card h1 { color: #333; font-size: 32px; margin-bottom: 10px; }
+        .welcome-card p { color: #666; font-size: 18px; margin-bottom: 30px; }
         
-        .welcome-card p {
-            color: #666;
-            font-size: 18px;
-            margin-bottom: 30px;
-        }
-        
-        .input-group {
-            margin-bottom: 20px;
-            text-align: left;
-        }
-        
+        .input-group { margin-bottom: 20px; text-align: left; }
         .input-group label {
             display: block;
             margin-bottom: 10px;
@@ -135,9 +115,7 @@
             margin-top: 10px;
         }
 
-        .btn-pay:hover {
-            transform: translateY(-3px);
-        }
+        .btn-pay:hover { transform: translateY(-3px); }
         
         .balance-card {
             background: linear-gradient(135deg, #4ECDC4, #44A08D);
@@ -163,11 +141,11 @@
             margin: 15px 0;
             text-shadow: 0 4px 10px rgba(0,0,0,0.2);
         }
-        
+
         .guest-name {
-            font-size: 20px;
+            font-size: 24px;
+            margin-top: 15px;
             opacity: 0.95;
-            margin-top: 10px;
         }
         
         .attractions-card {
@@ -202,18 +180,8 @@
             transform: scale(1.02);
         }
         
-        .attraction-name {
-            font-weight: bold;
-            color: #333;
-            font-size: 18px;
-        }
-        
-        .attraction-price {
-            color: #4ECDC4;
-            font-size: 15px;
-            font-weight: bold;
-            margin-top: 5px;
-        }
+        .attraction-name { font-weight: bold; color: #333; font-size: 18px; }
+        .attraction-price { color: #4ECDC4; font-size: 15px; font-weight: bold; margin-top: 5px; }
         
         .status-open {
             background: #4ECDC4;
@@ -254,29 +222,6 @@
         
         .hidden { display: none; }
 
-        /* QR код и чеки */
-        .qr-container {
-            background: white;
-            border-radius: 25px;
-            padding: 40px;
-            text-align: center;
-            box-shadow: 0 15px 40px rgba(0,0,0,0.3);
-            margin-bottom: 20px;
-        }
-
-        .qr-code {
-            width: 280px;
-            height: 280px;
-            margin: 20px auto;
-            background: white;
-            border: 5px solid #4ECDC4;
-            border-radius: 20px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 80px;
-        }
-
         .receipt {
             background: white;
             border-radius: 20px;
@@ -293,11 +238,7 @@
             margin-bottom: 15px;
         }
 
-        .receipt-header h3 {
-            color: #4ECDC4;
-            font-size: 24px;
-            margin-bottom: 5px;
-        }
+        .receipt-header h3 { color: #4ECDC4; font-size: 24px; margin-bottom: 5px; }
 
         .receipt-item {
             display: flex;
@@ -315,26 +256,13 @@
             color: #4ECDC4;
         }
 
-        .receipts-section {
-            margin-top: 20px;
-        }
-
-        .receipts-section h3 {
-            text-align: center;
-            margin-bottom: 15px;
-            color: #333;
-        }
-
-        .no-receipts {
-            text-align: center;
-            color: #999;
-            padding: 20px;
-        }
+        .receipts-section { margin-top: 20px; }
+        .receipts-section h3 { text-align: center; margin-bottom: 15px; color: #333; }
+        .no-receipts { text-align: center; color: #999; padding: 20px; }
 
         @media (max-width: 600px) {
             .balance-amount { font-size: 48px; }
             .container { padding: 15px; }
-            .qr-code { width: 220px; height: 220px; font-size: 60px; }
         }
     </style>
 </head>
@@ -349,11 +277,10 @@
     </div>
 
     <div class="container">
-        <!-- Экран входа -->
         <div id="login-screen">
             <div class="welcome-card">
                 <h1 id="welcome-title">🎉 Добро пожаловать!</h1>
-                <p id="welcome-text">Войдите в свою карту</p>
+                <p id="welcome-text">Войдите в систему</p>
                 
                 <div class="input-group">
                     <label id="name-label">👤 Ваше имя</label>
@@ -361,7 +288,7 @@
                 </div>
 
                 <div class="input-group">
-                    <label id="password-label">🔒 Пароль</label>
+                    <label id="password-label">🔒 Пароль (4 цифры)</label>
                     <input type="password" id="login-password" placeholder="••••" maxlength="4" inputmode="numeric">
                 </div>
                 
@@ -371,29 +298,22 @@
             </div>
         </div>
 
-        <!-- Главный экран -->
         <div id="main-screen" class="hidden">
             <div class="balance-card">
                 <div class="balance-label" id="balance-label">💰 ВАШ БАЛАНС</div>
                 <div class="balance-amount" id="balance-amount">0 сум</div>
-                <div class="guest-name" id="guest-display">👤 Гость</div>
+                <div class="guest-name" id="guest-name">👤 Гость</div>
             </div>
 
-            <!-- QR-код для оплаты -->
-            <div class="qr-container">
-                <h2 id="qr-title">📱 Покажите QR работнику</h2>
-                <div class="qr-code" id="qr-code">🎫</div>
-                <p id="qr-instruction" style="color: #666; margin-top: 15px;">
-                    Работник отсканирует этот QR-код для оплаты
-                </p>
+            <div class="attractions-card">
+                <h2 id="pay-title">💳 Оплата аттракционов</h2>
                 <button class="btn btn-pay" onclick="showPaymentModal()">
-                    <span id="pay-btn">💳 Оплатить аттракцион</span>
+                    <span id="pay-btn">🎢 Оплатить аттракцион</span>
                 </button>
             </div>
 
-            <!-- Чеки (последние 5) -->
             <div class="receipts-section">
-                <h3 id="receipts-title">🧾 Ваши чеки</h3>
+                <h3 id="receipts-title">🧾 Ваши чеки (последние 5)</h3>
                 <div id="receipts-list"></div>
             </div>
 
@@ -408,7 +328,6 @@
         </div>
     </div>
 
-    <!-- Модальное окно оплаты -->
     <div id="payment-modal" class="hidden" style="position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.8); display: flex; align-items: center; justify-content: center; z-index: 1000;">
         <div style="background: white; border-radius: 25px; padding: 40px; max-width: 500px; width: 90%;">
             <h2 id="modal-title" style="text-align: center; margin-bottom: 20px; color: #333;">Выберите аттракцион</h2>
@@ -427,17 +346,16 @@
         const translations = {
             ru: {
                 welcomeTitle: '🎉 Добро пожаловать!',
-                welcomeText: 'Войдите в свою карту',
+                welcomeText: 'Войдите в систему',
                 nameLabel: '👤 Ваше имя',
-                passwordLabel: '🔒 Пароль',
+                passwordLabel: '🔒 Пароль (4 цифры)',
                 namePlaceholder: 'Введите имя',
                 passwordPlaceholder: '••••',
                 loginBtn: '🚀 Войти',
                 balanceLabel: '💰 ВАШ БАЛАНС',
-                qrTitle: '📱 Покажите QR работнику',
-                qrInstruction: 'Работник отсканирует этот QR-код для оплаты',
-                payBtn: '💳 Оплатить аттракцион',
-                receiptsTitle: '🧾 Ваши чеки',
+                payTitle: '💳 Оплата аттракционов',
+                payBtn: '🎢 Оплатить аттракцион',
+                receiptsTitle: '🧾 Ваши чеки (последние 5)',
                 attractionsTitle: '🎢 Аттракционы парка',
                 logoutBtn: '🚪 Выйти',
                 statusOpen: '✅ Открыто',
@@ -445,31 +363,29 @@
                 sum: 'сум',
                 notFound: '❌ Неверное имя или пароль!',
                 enterName: '❌ Введите имя!',
-                enterPassword: '❌ Введите пароль (4 цифры)!',
+                enterPassword: '❌ Введите пароль!',
                 modalTitle: 'Выберите аттракцион',
                 modalCancel: 'Отмена',
                 noBalance: '❌ Недостаточно средств!',
                 success: '✅ Оплачено!',
                 noReceipts: 'Нет чеков',
                 receipt: 'ЧЕК',
-                date: 'Дата',
                 attraction: 'Аттракцион',
                 price: 'Цена',
                 balance: 'Остаток'
             },
             uz: {
                 welcomeTitle: '🎉 Xush kelibsiz!',
-                welcomeText: 'Kartangizga kiring',
+                welcomeText: 'Tizimga kiring',
                 nameLabel: '👤 Ismingiz',
-                passwordLabel: '🔒 Parol',
+                passwordLabel: '🔒 Parol (4 raqam)',
                 namePlaceholder: 'Ismni kiriting',
                 passwordPlaceholder: '••••',
                 loginBtn: '🚀 Kirish',
                 balanceLabel: '💰 BALANSINGIZ',
-                qrTitle: '📱 QR-kodni ishchiga ko\'rsating',
-                qrInstruction: 'Ishchi bu QR-kodni to\'lov uchun skanerlaydi',
-                payBtn: '💳 Attraktsion uchun to\'lash',
-                receiptsTitle: '🧾 Sizning cheklar',
+                payTitle: '💳 Attraksionlar uchun to\'lov',
+                payBtn: '🎢 Attraktsion uchun to\'lash',
+                receiptsTitle: '🧾 Sizning cheklar (oxirgi 5)',
                 attractionsTitle: '🎢 Park attraksionlari',
                 logoutBtn: '🚪 Chiqish',
                 statusOpen: '✅ Ochiq',
@@ -477,31 +393,29 @@
                 sum: "so'm",
                 notFound: '❌ Noto\'g\'ri ism yoki parol!',
                 enterName: '❌ Ismni kiriting!',
-                enterPassword: '❌ Parolni kiriting (4 raqam)!',
+                enterPassword: '❌ Parolni kiriting!',
                 modalTitle: 'Attraksionni tanlang',
                 modalCancel: 'Bekor qilish',
                 noBalance: '❌ Mablag\' yetarli emas!',
                 success: '✅ To\'landi!',
                 noReceipts: 'Cheklar yo\'q',
                 receipt: 'CHEK',
-                date: 'Sana',
                 attraction: 'Attraktsion',
                 price: 'Narx',
                 balance: 'Qoldiq'
             },
             en: {
                 welcomeTitle: '🎉 Welcome!',
-                welcomeText: 'Login to your card',
+                welcomeText: 'Login to the system',
                 nameLabel: '👤 Your name',
-                passwordLabel: '🔒 Password',
+                passwordLabel: '🔒 Password (4 digits)',
                 namePlaceholder: 'Enter name',
                 passwordPlaceholder: '••••',
                 loginBtn: '🚀 Login',
                 balanceLabel: '💰 YOUR BALANCE',
-                qrTitle: '📱 Show QR to worker',
-                qrInstruction: 'Worker will scan this QR code for payment',
-                payBtn: '💳 Pay for attraction',
-                receiptsTitle: '🧾 Your receipts',
+                payTitle: '💳 Pay for attractions',
+                payBtn: '🎢 Pay for attraction',
+                receiptsTitle: '🧾 Your receipts (last 5)',
                 attractionsTitle: '🎢 Park attractions',
                 logoutBtn: '🚪 Logout',
                 statusOpen: '✅ Open',
@@ -509,14 +423,13 @@
                 sum: 'sum',
                 notFound: '❌ Wrong name or password!',
                 enterName: '❌ Enter name!',
-                enterPassword: '❌ Enter password (4 digits)!',
+                enterPassword: '❌ Enter password!',
                 modalTitle: 'Choose attraction',
                 modalCancel: 'Cancel',
                 noBalance: '❌ Insufficient funds!',
                 success: '✅ Paid!',
                 noReceipts: 'No receipts',
                 receipt: 'RECEIPT',
-                date: 'Date',
                 attraction: 'Attraction',
                 price: 'Price',
                 balance: 'Balance'
@@ -560,8 +473,7 @@
             document.getElementById('login-password').placeholder = t.passwordPlaceholder;
             document.getElementById('login-btn').innerHTML = t.loginBtn;
             document.getElementById('balance-label').innerHTML = t.balanceLabel;
-            document.getElementById('qr-title').innerHTML = t.qrTitle;
-            document.getElementById('qr-instruction').textContent = t.qrInstruction;
+            document.getElementById('pay-title').innerHTML = t.payTitle;
             document.getElementById('pay-btn').innerHTML = t.payBtn;
             document.getElementById('receipts-title').innerHTML = t.receiptsTitle;
             document.getElementById('attractions-title').innerHTML = t.attractionsTitle;
@@ -582,7 +494,6 @@
                 return;
             }
 
-            const cardId = 'CARD_' + name.toLowerCase().replace(/\s+/g, '_');
             const databaseStr = localStorage.getItem('parkDatabase');
             
             if (!databaseStr) {
@@ -591,18 +502,15 @@
             }
 
             const database = JSON.parse(databaseStr);
+            const cards = Object.values(database.cards || {});
+            const card = cards.find(c => c.name.toLowerCase() === name.toLowerCase() && c.password === password);
 
-            if (!database.cards || !database.cards[cardId]) {
+            if (!card) {
                 alert(translations[currentLang].notFound);
                 return;
             }
 
-            if (database.cards[cardId].password !== password) {
-                alert(translations[currentLang].notFound);
-                return;
-            }
-
-            currentGuest = database.cards[cardId];
+            currentGuest = card;
             
             document.getElementById('login-screen').classList.add('hidden');
             document.getElementById('main-screen').classList.remove('hidden');
@@ -610,7 +518,6 @@
             updateDisplay();
             renderAttractions();
             renderReceipts();
-            generateQR();
             
             if (updateInterval) clearInterval(updateInterval);
             updateInterval = setInterval(updateGuestData, 1000);
@@ -637,7 +544,8 @@
                 if (!databaseStr) return;
                 
                 const database = JSON.parse(databaseStr);
-                const updated = database.cards[currentGuest.id];
+                const cards = Object.values(database.cards || {});
+                const updated = cards.find(c => c.name.toLowerCase() === currentGuest.name.toLowerCase());
                 
                 if (updated) {
                     currentGuest = updated;
@@ -654,15 +562,9 @@
             if (!currentGuest) return;
             
             const t = translations[currentLang];
+            document.getElementById('guest-name').textContent = '👤 ' + currentGuest.name;
             document.getElementById('balance-amount').textContent = 
                 currentGuest.balance.toLocaleString() + ' ' + t.sum;
-            document.getElementById('guest-display').textContent = '👤 ' + currentGuest.name;
-        }
-
-        function generateQR() {
-            if (!currentGuest) return;
-            const qrContainer = document.getElementById('qr-code');
-            qrContainer.innerHTML = currentGuest.name.charAt(0).toUpperCase() + currentGuest.name.charAt(1).toUpperCase();
         }
 
         function renderAttractions() {
@@ -726,7 +628,13 @@
             }
 
             const database = JSON.parse(localStorage.getItem('parkDatabase'));
-            const card = database.cards[currentGuest.id];
+            const cards = Object.values(database.cards || {});
+            const card = cards.find(c => c.name.toLowerCase() === currentGuest.name.toLowerCase());
+
+            if (!card) {
+                alert('Error: Card not found');
+                return;
+            }
 
             card.balance -= 7000;
             
@@ -744,7 +652,6 @@
             if (card.purchases.length > 5) card.purchases = card.purchases.slice(0, 5);
 
             database.transactions.unshift({
-                cardId: card.id,
                 name: card.name,
                 amount: -7000,
                 type: 'payment',
